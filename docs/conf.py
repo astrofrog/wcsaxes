@@ -76,6 +76,9 @@ copyright = '{0}, {1}'.format(
 __import__(setup_cfg['package_name'])
 package = sys.modules[setup_cfg['package_name']]
 
+
+print("PATH", package.__path__)
+
 # The short X.Y version.
 version = package.__version__.split('-', 1)[0]
 # The full version, including alpha/beta/rc tags.
