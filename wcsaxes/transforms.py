@@ -170,7 +170,7 @@ class WCSPixel2WorldTransform(CurvedTransform):
 
 
 try:
-    
+
     from astropy.coordinates import SkyCoord
     from astropy.coordinates import frame_transform_graph
 
@@ -216,11 +216,21 @@ try:
 
             x_in, y_in = input_coords[:, 0], input_coords[:, 1]
 
+            # workaround for bug in astropy
+            keep = ~np.isnan(x_in) & ~np.isnan(y_in)
+            x_in, y_in = x_in[keep], y_in[keep]
+
             c_in = SkyCoord(x_in, y_in, unit=(u.deg, u.deg), frame=self.input_system)
 
             c_out = c_in.transform_to(self.output_system)
 
-            return np.concatenate((c_out.spherical.lon.deg[:, np.newaxis], c_out.spherical.lat.deg[:, np.newaxis]), 1)
+            # workaround for bug in astropy
+            x_out = np.ones(x_in.shape) * np.nan
+            y_out = np.ones(y_in.shape) * np.nan
+            x_out[keep] = c_out.spherical.lon.deg
+            y_out[keep] = c_out.spherical.lat.deg
+
+            return np.concatenate((x_out[:, np.newaxis], y_out[:, np.newaxis]), 1)
 
         transform_non_affine = transform
 
