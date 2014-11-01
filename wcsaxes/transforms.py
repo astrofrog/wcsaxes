@@ -12,7 +12,7 @@ from matplotlib.transforms import Transform
 from astropy import units as u
 from astropy.wcs import WCS
 from astropy.extern import six
-from .utils import get_coordinate_frame
+from .wcs_utils import wcs_to_celestial_frame
 
 
 @six.add_metaclass(abc.ABCMeta)
@@ -181,14 +181,14 @@ try:
             self._output_system_name = output_system
 
             if isinstance(self._input_system_name, WCS):
-                self.input_system = get_coordinate_frame(self._input_system_name)
+                self.input_system = wcs_to_celestial_frame(self._input_system_name)
             elif isinstance(self._input_system_name, six.string_types):
                 self.input_system = frame_transform_graph.lookup_name(self._input_system_name)
                 if self.input_system is None:
                     raise ValueError("Frame {0} not found".format(self._input_system_name))
 
             if isinstance(self._output_system_name, WCS):
-                self.output_system = get_coordinate_frame(self._output_system_name)
+                self.output_system = wcs_to_celestial_frame(self._output_system_name)
             elif isinstance(self._output_system_name, six.string_types):
                 self.output_system = frame_transform_graph.lookup_name(self._output_system_name)
                 if self.output_system is None:
@@ -249,7 +249,7 @@ except ImportError:
             self._output_system_name = output_system
 
             if isinstance(self._input_system_name, WCS):
-                self.input_system = get_coordinate_frame(self._input_system_name)
+                self.input_system = wcs_to_celestial_frame(self._input_system_name)
             elif isinstance(self._input_system_name, six.string_types):
                 if self._input_system_name == 'fk5':
                     self.input_system = FK5
@@ -259,7 +259,7 @@ except ImportError:
                     raise NotImplemented("frame {0} not implemented".format(self._input_system_name))
 
             if isinstance(self._output_system_name, WCS):
-                self.output_system = get_coordinate_frame(self._output_system_name)
+                self.output_system = wcs_to_celestial_frame(self._output_system_name)
             elif isinstance(self._output_system_name, six.string_types):
                 if self._output_system_name == 'fk5':
                     self.output_system = FK5
