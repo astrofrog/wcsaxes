@@ -154,7 +154,7 @@ class TestAngleFormatterLocator(object):
         with rc_context(rc={'text.usetex': True}):
             assert fl.formatter([15.392231] * u.degree, None)[0] == "15$^\circ$23'32\""
 
-    @pytest.mark.parametrize(('format'), ['x.xxx', 'dd.ss', 'dd:ss', 'mdd:mm:ss'])
+    @pytest.mark.parametrize(('format'), ['x.xxx', 'dd.ss', 'dd:ss', 'mdd:mm:ss', 'dod', 'mom', 'sos', 'xox'])
     def test_invalid_formats(self, format):
         fl = AngleFormatterLocator(number=5)
         with pytest.raises(ValueError) as exc:

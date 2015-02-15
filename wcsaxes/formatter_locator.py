@@ -20,10 +20,10 @@ from astropy.coordinates import Angle
 
 DMS_RE = re.compile('^dd(:mm(:ss(.(s)+)?)?)?$')
 HMS_RE = re.compile('^hh(:mm(:ss(.(s)+)?)?)?$')
-DDEC_RE = re.compile('^d(.(d)+)?$')
-DMIN_RE = re.compile('^m(.(m)+)?$')
-DSEC_RE = re.compile('^s(.(s)+)?$')
-SCAL_RE = re.compile('^x(.(x)+)?$')
+DDEC_RE = re.compile('^d(\.(d)+)?$')
+DMIN_RE = re.compile('^m(\.(m)+)?$')
+DSEC_RE = re.compile('^s(\.(s)+)?$')
+SCAL_RE = re.compile('^x(\.(x)+)?$')
 
 
 class BaseFormatterLocator(object):
