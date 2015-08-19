@@ -139,3 +139,43 @@ def wcs_to_celestial_frame(wcs):
                 return frame
     raise ValueError("Could not determine celestial frame corresponding to "
                      "the specified WCS object")
+
+
+def wcs_is_identical_world_system(wcs1, wcs2):
+    """
+    Determine whether two WCS objects have the same world coordinate system.
+
+    This helps us understand if we can go pixel1 -> world -> pixel2 by chaining
+    the two WCS objects.
+    """
+
+    if wcs1.naxis != wcs2.naxis:
+        return False
+
+    for i in range(wcs1.naxis):
+
+        if wcs1.wcs.ctype[i] != wcs2.wcs.ctype[i]:
+            return False
+
+        if wcs1.wcs.axis_types[i] != wcs2.wcs.axis_types[i]:
+            return False
+
+    if wcs1.wcs.specsys != wcs2.wcs.specsys:
+        return False
+
+    if wcs1.wcs.radesys != wcs2.wcs.radesys:
+        return False
+
+    if (wcs1.wcs.equinox != wcs2.wcs.equinox and
+        np.isnan(wcs1.wcs.equinox) is not np.isnan(wcs2.wcs.equinox)):
+        return False
+
+    if (wcs1.wcs.restfrq != wcs2.wcs.restfrq and
+        np.isnan(wcs1.wcs.restfrq) is not np.isnan(wcs2.wcs.restfrq)):
+        return False
+
+    if (wcs1.wcs.restwav != wcs2.wcs.restwav and
+        np.isnan(wcs1.wcs.restwav) is not np.isnan(wcs2.wcs.restwav)):
+        return False
+
+    return True

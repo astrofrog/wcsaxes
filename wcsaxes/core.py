@@ -10,7 +10,7 @@ from .transforms import (WCSPixel2WorldTransform, WCSWorld2PixelTransform,
                          CoordinateTransform)
 from .coordinates_map import CoordinatesMap
 from .utils import get_coord_meta
-from .wcs_utils import wcs_to_celestial_frame
+from .wcs_utils import wcs_to_celestial_frame, wcs_is_identical_world_system
 from .frame import RectangularFrame
 import numpy as np
 
@@ -298,19 +298,34 @@ class WCSAxes(Axes):
 
         if isinstance(frame, WCS):
 
-            coord_in = wcs_to_celestial_frame(self.wcs)
-            coord_out = wcs_to_celestial_frame(frame)
+            if frame.is_celestial:
 
-            if coord_in == coord_out:
+                coord_in = wcs_to_celestial_frame(self.wcs)
+                coord_out = wcs_to_celestial_frame(frame)
 
-                return (WCSPixel2WorldTransform(self.wcs, slice=self.slices)
+                if coord_in == coord_out:
+
+                    return (WCSPixel2WorldTransform(self.wcs, slice=self.slices)
+                            + WCSWorld2PixelTransform(frame))
+
+                else:
+
+                    return (WCSPixel2WorldTransform(self.wcs, slice=self.slices)
+                            + CoordinateTransform(self.wcs, frame)
+                            + WCSWorld2PixelTransform(frame))
+
+            elif wcs_is_identical_world_system(self.wcs, frame):
+
+                return (WCSPixel2WorldTransform(self.wcs)
                         + WCSWorld2PixelTransform(frame))
 
             else:
 
-                return (WCSPixel2WorldTransform(self.wcs, slice=self.slices)
-                        + CoordinateTransform(self.wcs, frame)
-                        + WCSWorld2PixelTransform(frame))
+                raise ValueError("Could not determine conversion between the"
+                                 "WCS object specified and the WCS associated"
+                                 "with the axes")
+
+
 
         elif frame == 'pixel':
 
