@@ -13,17 +13,13 @@ install:
     - export PATH=/home/travis/miniconda/bin:$PATH
     - conda config --set always_yes yes --set changeps1 no
     - conda config --add channels defaults
-    - conda config --add channels astropy
-    - conda config --add channels openastronomy
     - conda config --add channels astropy-ci-extras
     - conda update conda
     - conda create -n test python=2.7
     - source activate test
-    - conda install pytest pip
     - conda install numpy
     - conda install python=2.7 astropy
 
 script:
     - python -c 'import numpy'
-    - python -c 'import astropy'
 
