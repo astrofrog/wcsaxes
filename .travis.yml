@@ -12,7 +12,6 @@ install:
     - bash miniconda.sh -b -p /home/travis/miniconda
     - export PATH=/home/travis/miniconda/bin:$PATH
     - conda config --set always_yes yes --set changeps1 no
-    - conda config --add channels defaults
     - conda config --add channels astropy-ci-extras
     - conda update conda
     - conda create -n test python=2.7
