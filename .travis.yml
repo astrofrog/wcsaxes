@@ -13,6 +13,7 @@ install:
     - export PATH=/home/travis/miniconda/bin:$PATH
     - conda config --set always_yes yes --set changeps1 no
     - conda config --add channels astropy-ci-extras
+    - conda config --add channels defaults
     - conda update conda
     - conda create -n test python=2.7
     - source activate test
