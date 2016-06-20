@@ -25,21 +25,16 @@ env:
 
 matrix:
     include:
-
         - python: 2.7
           env: SETUP_CMD='test --coverage --remote-data'
-
-before_install:
-
-    # Make sure matplotlib uses PyQT not PySide
-    - export QT_API=pyqt
 
 install:
     - git clone git://github.com/astropy/ci-helpers.git
     - source ci-helpers/travis/setup_conda_$TRAVIS_OS_NAME.sh
 
 script:
-    - python setup.py $SETUP_CMD
+    - python -c 'import numpy'
+    - python -c 'import astropy'
 
 after_success:
     - if [[ $SETUP_CMD == 'test --coverage --remote-data' ]]; then
