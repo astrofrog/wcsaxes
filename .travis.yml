@@ -17,6 +17,7 @@ install:
     - conda update conda
     - conda create -n test python=2.7
     - source activate test
+    - conda search astropy
     - conda install numpy
     - conda install python=2.7 astropy
 
