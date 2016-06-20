@@ -11,11 +11,6 @@ addons:
             - texlive-latex-extra
             - dvipng
 
-python:
-    - 2.7
-    - 3.4
-    - 3.5
-
 env:
     global:
         # The following versions are the 'default' for tests, unless
@@ -26,45 +21,13 @@ env:
         - CONDA_DEPENDENCIES='pyqt nose matplotlib pillow'
         - PIP_DEPENDENCIES='pytest-mpl'
         - SETUP_XVFB=True
-    matrix:
-        - SETUP_CMD='egg_info'
-        - SETUP_CMD='test --remote-data'
+        - DEBUG=True
 
 matrix:
     include:
 
-        # Do a coverage test in Python 2.
         - python: 2.7
           env: SETUP_CMD='test --coverage --remote-data'
-
-        # Check for sphinx doc build warnings - we do this first because it
-        # may run for a long time
-        - python: 2.7
-          env: SETUP_CMD='build_sphinx -w'
-
-        # Try Astropy development and LTS versions
-        - python: 2.7
-          env: ASTROPY_VERSION=development SETUP_CMD='test --remote-data'
-        - python: 3.5
-          env: ASTROPY_VERSION=development SETUP_CMD='test --remote-data'
-        - python: 2.7
-          env: ASTROPY_VERSION=lts SETUP_CMD='test --remote-data'
-        - python: 3.5
-          env: ASTROPY_VERSION=lts SETUP_CMD='test --remote-data'
-
-        # Try all python versions with the latest numpy
-        - python: 3.3
-          env: SETUP_CMD='test --remote-data' NUMPY_VERSION=1.9
-
-        # Try older numpy versions
-        - python: 2.7
-          env: NUMPY_VERSION=1.9 SETUP_CMD='test --remote-data'
-        - python: 2.7
-          env: NUMPY_VERSION=1.8 SETUP_CMD='test --remote-data'
-        - python: 2.7
-          env: NUMPY_VERSION=1.7 SETUP_CMD='test --remote-data'
-        - python: 2.7
-          env: NUMPY_VERSION=1.6 SETUP_CMD='test --remote-data'
 
 before_install:
 
