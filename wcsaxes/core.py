@@ -3,6 +3,7 @@
 from matplotlib.axes import Axes, subplot_class_factory
 from matplotlib.transforms import Affine2D, Bbox, Transform
 
+import astropy.coordinates
 from astropy.wcs import WCS
 from astropy.wcs.utils import wcs_to_celestial_frame
 from astropy.extern import six
@@ -125,6 +126,52 @@ class WCSAxes(Axes):
                 kwargs['origin'] = 'lower'
 
         return super(WCSAxes, self).imshow(X, *args, **kwargs)
+
+    def plot_coord(self, *args, **kwargs):
+        """
+        Plot `~astropy.coordinates.SkyCoord` or
+        `~astropy.coordinates.BaseCoordinateFrame` objects onto the axes.
+
+        Parameters
+        ----------
+        coordinate : `~astropy.coordinates.SkyCoord` or `~astropy.coordinates.BaseCoordinateFrame`
+            The first argument to plot should be a coordinate, which will then
+            be converted to parameters to `matplotlib.Axes.plot`. All other
+            arguments are the same as `matplotlib.Axes.plot`. If not specified
+            a ``transform`` keyword argument will be created based on the
+            coordinate.
+
+        """
+        args = list(args)
+        coord_instances = (astropy.coordinates.SkyCoord, astropy.coordinates.BaseCoordinateFrame)
+        if isinstance(args[0], coord_instances):
+
+            # Extract the frame from the first argument.
+            frame0 = args.pop(0)
+            if isinstance(frame0, astropy.coordinates.SkyCoord):
+                frame0 = frame0.frame
+
+            plot_data = []
+            for coord in self.coords:
+                if coord.coord_type == 'longitude':
+                    plot_data.append(frame0.data.lon.to(coord.coord_unit).value)
+                elif coord.coord_type == 'latitude':
+                    plot_data.append(frame0.data.lat.to(coord.coord_unit).value)
+                else:
+                    raise NotImplementedError("Scalar Coordinate Support is Not Implemented.")
+
+            if 'transform' not in kwargs.keys():
+                transform = self.get_transform(frame0)
+                kwargs.update({'transform':transform})
+
+            args = plot_data + args
+
+        super(WCSAxes, self).plot(*args, **kwargs)
+
+
+
+
+
 
     def reset_wcs(self, wcs=None, slices=None, transform=None, coord_meta=None):
         """
