@@ -132,14 +132,22 @@ class WCSAxes(Axes):
         Plot `~astropy.coordinates.SkyCoord` or
         `~astropy.coordinates.BaseCoordinateFrame` objects onto the axes.
 
+        The first argument to `~wcsaxes.WCSAxes.plot_coord` should be a
+        coordinate, which will then be converted to the first two parameters to
+        `matplotlib.Axes.plot`. All other arguments are the same as
+        `matplotlib.Axes.plot`. If not specified a ``transform`` keyword
+        argument will be created based on the coordinate.
+
         Parameters
         ----------
         coordinate : `~astropy.coordinates.SkyCoord` or `~astropy.coordinates.BaseCoordinateFrame`
-            The first argument to plot should be a coordinate, which will then
-            be converted to parameters to `matplotlib.Axes.plot`. All other
-            arguments are the same as `matplotlib.Axes.plot`. If not specified
-            a ``transform`` keyword argument will be created based on the
-            coordinate.
+            The coordinate object to plot on the axes. This is converted to the
+            first two arguments to `matplotlib.Axes.plot`.
+
+        See Also
+        --------
+
+        matplotlib.Axes.plot : This method is called from this function with all arguments passed to it.
 
         """
         args = list(args)
@@ -167,11 +175,6 @@ class WCSAxes(Axes):
             args = plot_data + args
 
         super(WCSAxes, self).plot(*args, **kwargs)
-
-
-
-
-
 
     def reset_wcs(self, wcs=None, slices=None, transform=None, coord_meta=None):
         """
