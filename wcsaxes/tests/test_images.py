@@ -211,7 +211,6 @@ class TestBasic(BaseImageTests):
         return fig
 
     @remote_data
-    @pytest.mark.mpl_image_compare(baseline_dir=baseline_dir, filename='plot_coord_transform.png', tolerance=1.5)
     def test_plot_coord_transform(self):
         fig = plt.figure(figsize=(6, 6))
         ax = fig.add_axes([0.15, 0.15, 0.8, 0.8],
