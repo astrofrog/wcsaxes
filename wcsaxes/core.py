@@ -3,7 +3,7 @@
 from matplotlib.axes import Axes, subplot_class_factory
 from matplotlib.transforms import Affine2D, Bbox, Transform
 
-import astropy.coordinates
+from astropy.coordinates import SkyCoord, BaseCoordinateFrame
 from astropy.wcs import WCS
 from astropy.wcs.utils import wcs_to_celestial_frame
 from astropy.extern import six
@@ -151,12 +151,12 @@ class WCSAxes(Axes):
 
         """
         args = list(args)
-        coord_instances = (astropy.coordinates.SkyCoord, astropy.coordinates.BaseCoordinateFrame)
+        coord_instances = (SkyCoord, BaseCoordinateFrame)
         if isinstance(args[0], coord_instances):
 
             # Extract the frame from the first argument.
             frame0 = args.pop(0)
-            if isinstance(frame0, astropy.coordinates.SkyCoord):
+            if isinstance(frame0, SkyCoord):
                 frame0 = frame0.frame
 
             plot_data = []
@@ -166,7 +166,8 @@ class WCSAxes(Axes):
                 elif coord.coord_type == 'latitude':
                     plot_data.append(frame0.data.lat.to(coord.coord_unit).value)
                 else:
-                    raise NotImplementedError("Scalar Coordinate Support is Not Implemented.")
+                    raise NotImplementedError("Coordinates cannot be plotted with this "
+                                              "method because the WCS does not represent longitude/latitude.")
 
             if 'transform' in kwargs.keys():
                 raise TypeError("The 'transform' keyword argument is not allowed,"
