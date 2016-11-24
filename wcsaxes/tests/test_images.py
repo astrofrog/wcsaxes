@@ -221,7 +221,8 @@ class TestBasic(BaseImageTests):
         ax.set_ylim(-0.5, 720.5)
 
         c = SkyCoord(359.76045223*u.deg, 0.26876217*u.deg)
-        ax.plot_coord(c, 'o', transform=ax.get_transform('galactic'))
+        with pytest.raises(TypeError):
+            ax.plot_coord(c, 'o', transform=ax.get_transform('galactic'))
 
         return fig
 

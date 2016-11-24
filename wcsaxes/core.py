@@ -168,9 +168,12 @@ class WCSAxes(Axes):
                 else:
                     raise NotImplementedError("Scalar Coordinate Support is Not Implemented.")
 
-            if 'transform' not in kwargs.keys():
-                transform = self.get_transform(frame0)
-                kwargs.update({'transform':transform})
+            if 'transform' in kwargs.keys():
+                raise TypeError("The 'transform' keyword argument is not allowed,"
+                                " as it is automatically determined by the input coordinate frame.")
+
+            transform = self.get_transform(frame0)
+            kwargs.update({'transform':transform})
 
             args = plot_data + args
 
