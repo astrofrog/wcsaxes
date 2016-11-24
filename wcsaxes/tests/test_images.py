@@ -211,21 +211,6 @@ class TestBasic(BaseImageTests):
         return fig
 
     @remote_data
-    def test_plot_coord_transform(self):
-        fig = plt.figure(figsize=(6, 6))
-        ax = fig.add_axes([0.15, 0.15, 0.8, 0.8],
-                          projection=WCS(self.twoMASS_k_header),
-                          aspect='equal')
-        ax.set_xlim(-0.5, 720.5)
-        ax.set_ylim(-0.5, 720.5)
-
-        c = SkyCoord(359.76045223*u.deg, 0.26876217*u.deg)
-        with pytest.raises(TypeError):
-            ax.plot_coord(c, 'o', transform=ax.get_transform('galactic'))
-
-        return fig
-
-    @remote_data
     @pytest.mark.mpl_image_compare(baseline_dir=baseline_dir, filename='plot_line.png', tolerance=1.5)
     def test_plot_line(self):
         fig = plt.figure(figsize=(6, 6))
