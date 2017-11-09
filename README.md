@@ -1,6 +1,8 @@
 About
 =====
 
+**Please note: WCSAxes has now been [merged into Astropy](http://docs.astropy.org/en/stable/visualization/wcsaxes/index.html)!**
+
 WCSAxes is a package that makes it easy to plot images with world coordinate
 system (WCS) information (which translates pixel to 'world' coordinates and
 back) using [Matplotlib](http://www.matplotlib.org). Originally intended for
